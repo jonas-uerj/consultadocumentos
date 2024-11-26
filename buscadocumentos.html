@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Documentos Pendentes</title>
+    <script>
+        // Substitua pelo URL do seu Web App gerado no Google Apps Script
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwqbvmlDhB9Pr7__kNkDCi5sZgIrOlIY_sLtYgpWvp4zhAioYBLlm7ukhA7TfKQEsx3lA/exec'; 
+
+        function searchDocuments() {
+            const cpf = document.getElementById('cpf').value;
+            if (!cpf) {
+                alert("Por favor, insira o CPF da mãe.");
+                return;
+            }
+
+            // Realiza a requisição GET para o Google Apps Script
+            fetch(`${WEB_APP_URL}?cpf=${cpf}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('result').innerHTML = `<p><strong>Erro:</strong> ${data.error}</p>`;
+                    } else {
+                        document.getElementById('result').innerHTML = `
+                            <h3>Informações Encontradas:</h3>
+                            <p><strong>Aluno:</strong> ${data.aluno}</p>
+                            <p><strong>Turma:</strong> ${data.turma}</p>
+							<p><strong>Documentos Pendentes:</strong> ${data.documentos}</p>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao buscar os dados:", error);
+                    alert("Erro ao acessar os dados. Tente novamente mais tarde.");
+                });
+        }
+    </script>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 0 auto; padding-top: 50px;">
+        <h1>Consulta de Documentos Pendentes</h1>
+        <form onsubmit="event.preventDefault(); searchDocuments();">
+            <label for="cpf">CPF da Mãe:</label><br>
+            <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF" required><br><br>
+            <button type="submit">Buscar Documentos</button>
+        </form>
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+</body>
+</html>
