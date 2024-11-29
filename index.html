@@ -3,49 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulta de Documentos Pendentes</title>
+    <title>Enviar Número via GET</title>
     <script>
-        // Substitua pelo URL do seu Web App gerado no Google Apps Script
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwqbvmlDhB9Pr7__kNkDCi5sZgIrOlIY_sLtYgpWvp4zhAioYBLlm7ukhA7TfKQEsx3lA/exec'; 
+        // Função chamada quando o formulário é enviado
+        function enviarFormulario(event) {
+            event.preventDefault();  // Impede o envio padrão do formulário
 
-        function searchDocuments() {
-            const cpf = document.getElementById('cpf').value;
-            if (!cpf) {
-                alert("Por favor, insira o CPF da mãe.");
-                return;
-            }
+            // Obtém o valor do campo de entrada
+            const numero = document.getElementById("numero").value;
 
-            // Realiza a requisição GET para o Google Apps Script
-            fetch(`${WEB_APP_URL}?cpf=${cpf}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        document.getElementById('result').innerHTML = `<p><strong>Erro:</strong> ${data.error}</p>`;
-                    } else {
-                        document.getElementById('result').innerHTML = `
-                            <h3>Informações Encontradas:</h3>
-                            <p><strong>Aluno:</strong> ${data.aluno}</p>
-                            <p><strong>Turma:</strong> ${data.turma}</p>
-							<p><strong>Documentos Pendentes:</strong> ${data.documentos}</p>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    console.error("Erro ao buscar os dados:", error);
-                    alert("Erro ao acessar os dados. Tente novamente mais tarde.");
-                });
+            // Armazena o número na variável
+            let numeroArmazenado = numero;
+
+            // Exibe o número armazenado na tela
+           document.getElementById("resultado").innerText = "Por favor, aguarde..." //+ numeroArmazenado;
+		   
+
+            // Constrói a URL para envio GET com o número na query string
+            const url = "https://script.google.com/macros/s/AKfycbwGT9RE_zJ6omMItztTgWH4k4pd9HxITEkyDvd5azHk0wJG3hw/exec?ID=1g1Q7jsQNF47Ta4yiDlYmoCzRlXTthkrVynG5q2hoxkk?SH=sheet1&func=ReadRecord&id=" + numeroArmazenado;
+
+            // Redireciona para a URL com o número via GET
+            window.location.href = url;
         }
+		// https://script.google.com/macros/s/AKfycbwGT9RE_zJ6omMItztTgWH4k4pd9HxITEkyDvd5azHk0wJG3hw/exec?ID=1g1Q7jsQNF47Ta4yiDlYmoCzRlXTthkrVynG5q2hoxkk?SH=sheet1&func=ReadRecord&id=1
     </script>
 </head>
 <body>
-    <div style="max-width: 600px; margin: 0 auto; padding-top: 50px;">
-        <h1>Consulta de Documentos Pendentes</h1>
-        <form onsubmit="event.preventDefault(); searchDocuments();">
-            <label for="cpf">CPF da Mãe:</label><br>
-            <input type="text" id="cpf" name="cpf" placeholder="Digite o CPF" required><br><br>
-            <button type="submit">Buscar Documentos</button>
-        </form>
-        <div id="result" style="margin-top: 20px;"></div>
-    </div>
+    
+	<h1> E.M. MARIA ELIONDAS DOS SANTOS</h1>
+	<h2>Consultar pendencias de documentos do(a) aluno(a).</h2>
+    
+    <form id="formulario" onsubmit="enviarFormulario(event)">
+        <label for="numero">Digite o número  do CPF da mãe:</label>
+        <input type="number" id="numero" name="numero" required>
+        <button type="submit">Verificar</button>
+    </form>
+
+    <!-- Exibe o número armazenado -->
+    <p id="resultado"></p>
 </body>
+
 </html>
+
